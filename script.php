@@ -1,5 +1,7 @@
 <?php
 
+session_start();
+
 $categorias = [];
 $categorias[] = 'Infantil';
 $categorias[] = 'Adolescente';
@@ -13,38 +15,51 @@ $idade = $_POST['idade'];
 // var_dump($idade);
 
 if(empty($nome) || empty($idade)){
-    echo 'O campo não pode estar vazio';
+    $_SESSION['mensagem-de-erro'] = 'O campo não pode estar vazio';
+    header('location: index.php');
     return;
 }
-if(strlen($nome) < 3){
-    echo 'O nome deve conter mais de 2 caractéres';
+else if(strlen($nome) < 3){
+    $_SESSION['mensagem-de-erro'] = 'O nome deve conter mais de 2 caractéres';
+    header('location: index.php');
     return;
 }
-if(strlen($nome) > 40){
-    echo "O nome é muito extenso";
+else if(!is_numeric($idade)){
+    $_SESSION['mensagem-de-erro'] = "O valor que você colocou não é um número";
+    header('location: index.php');
     return;
 }
-if(!is_numeric($idade)){
-    echo "O valor que você colocou não é um número";
+else if(strlen($nome) > 40){
+    $_SESSION['mensagem-de-erro'] = "O nome é muito extenso";
+    header('location: index.php');
     return;
+}
+else{
+    $_SESSION['mensagem-de-erro'] = "";
 }
 
 
 if($idade >= 6 && $idade <=  12){
     for($i = 0; $i < count($categorias); $i++){
         if($categorias[$i] == 'Infantil')
-            echo 'O nadador ' .$nome. ' compete na categoria ' .$categorias[$i];
+            $_SESSION['mensagem-de-sucesso'] = 'O nadador ' .$nome. ' compete na categoria ' .$categorias[$i];
+            header('location: index.php');
+
     }
 }
 else if($idade >= 13 && $idade <=  18){
     for($i = 0; $i < count($categorias); $i++){
         if($categorias[$i] == 'Adolescente')
-            echo 'O nadador ' .$nome. ' compete na categoria ' .$categorias[$i];
+            $_SESSION['mensagem-de-sucesso'] = 'O nadador ' .$nome. ' compete na categoria ' .$categorias[$i];
+            header('location: index.php');
+
     }
 }
 else if($idade > 18){
     for($i = 0; $i < count($categorias); $i++){
         if($categorias[$i] == 'Adulto')
-            echo 'O nadador ' .$nome. ' compete na categoria ' .$categorias[$i];
+           $_SESSION['mensagem-de-sucesso'] = 'O nadador ' .$nome. ' compete na categoria ' .$categorias[$i];
+           header('location: index.php');
+
     }
 }
